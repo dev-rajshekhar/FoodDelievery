@@ -9,24 +9,25 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {COLORS, FONTS, icons, images, SIZES} from '../constants';
+import {COLORS, FONTS, icons, SIZES} from '../constants';
 import category_data from './data_repo/category_data';
 import restaurant_data from './data_repo/restaurant_data';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
   const [selectedRestaurant, setSelectedRetaurant] = useState([]);
   function getCategoryNameById(id) {
     let category = category_data.filter((a) => a.id == id);
-
     if (category.length > 0) return category[0].name;
-
     return '';
   }
 
   const RenderHotels = ({item}) => {
     return (
       <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('OrderDetails', {item});
+        }}
         style={{
           padding: 20,
           flexDirection: 'column',
@@ -97,6 +98,8 @@ const HomeScreen = () => {
           <Image
             source={icons.nearby}
             style={{
+              tintColor: COLORS.darkgray,
+
               height: 30,
               width: 30,
               resizeMode: 'contain',
@@ -128,7 +131,12 @@ const HomeScreen = () => {
           }}>
           <Image
             source={icons.basket}
-            style={{height: 30, width: 30, resizeMode: 'contain'}}></Image>
+            style={{
+              height: 30,
+              width: 30,
+              tintColor: COLORS.darkgray,
+              resizeMode: 'contain',
+            }}></Image>
         </TouchableOpacity>
       </View>
     );
@@ -191,6 +199,7 @@ const HomeScreen = () => {
       <Text style={{...FONTS.h1, padding: 10}}>{`Main \nCategories`}</Text>
       <View>
         <FlatList
+          keyExtractor={(item) => `${item.id}`}
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           data={category_data}
@@ -198,7 +207,11 @@ const HomeScreen = () => {
         />
       </View>
 
-      <FlatList data={selectedRestaurant} renderItem={RenderHotels} />
+      <FlatList
+        keyExtractor={(item) => `${item.id}`}
+        data={selectedRestaurant}
+        renderItem={RenderHotels}
+      />
     </SafeAreaView>
   );
 };
