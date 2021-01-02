@@ -14,10 +14,12 @@ const OrderDetails = ({route, navigation}) => {
 
   const [restaurants, setRestaurants] = useState();
   const [orderItems, setOrderItems] = React.useState([]);
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   useEffect(() => {
-    let {item} = route.params;
+    let {item, currentLocation} = route.params;
     setRestaurants(item);
+    setCurrentLocation(currentLocation);
   }, []);
 
   function editOrder(action, menuId, price) {
@@ -283,6 +285,12 @@ const OrderDetails = ({route, navigation}) => {
           </View>
         </View>
         <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('TrackOrder', {
+              restaurant: restaurants,
+              currentLocation,
+            });
+          }}
           style={{
             height: 50,
             borderRadius: 20,

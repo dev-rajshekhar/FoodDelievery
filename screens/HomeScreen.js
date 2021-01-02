@@ -16,6 +16,18 @@ import restaurant_data from './data_repo/restaurant_data';
 const HomeScreen = ({navigation}) => {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1);
   const [selectedRestaurant, setSelectedRetaurant] = useState([]);
+
+  const initialCurrentLocation = {
+    streetName: 'Kuching',
+    gps: {
+      latitude: 1.5496614931250685,
+      longitude: 110.36381866919922,
+    },
+  };
+  const [currentLocation, setCurrentLocation] = useState(
+    initialCurrentLocation,
+  );
+
   function getCategoryNameById(id) {
     let category = category_data.filter((a) => a.id == id);
     if (category.length > 0) return category[0].name;
@@ -26,7 +38,7 @@ const HomeScreen = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('OrderDetails', {item});
+          navigation.navigate('OrderDetails', {item, currentLocation});
         }}
         style={{
           padding: 20,
